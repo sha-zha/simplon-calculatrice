@@ -8,11 +8,24 @@
   </head>
   <body>
    <main class="container">
+    <div class="d-flex mx-auto col-12 card calc-operation" style="
+    width: 275px;
+    background-color: #3a4655!important;
+    color: #d0e5ff;
+">
+		<ul id="local">
+			
+		</ul>
+</div>
 
+    		
+    	
+
+    </div>
   <section class="calc-body">
 	    <div class="calc-screen">
 	      <div class="calc-operation" id="operation"> </div>
-	      <div class="calc-typed" id="affiche"></div>
+	      <div class="calc-typed col-12" id="affiche"></div>
 	    </div>
 
 	    <div class="calc-button-row">
@@ -45,16 +58,12 @@
 	    </div>
     </section>
 
-    <div id="local" class="col-12 card">
-    	
-    	
 
-    </div>
   	</main>
   	    <script>
 
 
-let btn = document.querySelectorAll(".button");
+const btn = document.querySelectorAll(".button");
 let affiche = document.getElementById('affiche');
 let operation = document.getElementById('operation');
 let local = document.getElementById('local'); 
@@ -73,12 +82,9 @@ let array = [];
 
      		case '=' :
      			calcule(affiche.innerHTML);
-     			active();
-     		break;
-     		case '+':
-     			disabled(btn[i]);
 
      		break;
+
      		default:
 				affiche.append(btn[i].innerHTML)
      		break;
@@ -93,32 +99,36 @@ function calcule (arg) {
 
 	//permet de calculer
 	var result = eval(arg);
+	var li = document.createElement('li');
+	li.classList.add('list-group-item', 'list-group-item-dark');
 
-	//stocke le réultat et le calcule
+
+	// stocke le réultat et le calcule
 	let storage = localStorage.setItem('historique', arg+'='+result);
 	let his = localStorage.getItem('historique' );
 	
-	//affiche le résultat et historique 
+	// affiche le résultat et historique 
 	affiche.innerHTML = result;
 	operation.innerHTML = result;
 	
 
-	//limite 
+	// limite 
 	if(array.length == 10 ){
-		//supprime le premier élément
+	// 	//supprime le premier élément
 		array.shift();
 		array.push(arg+'='+result);
 		local.innerHTML = "";
 
-		//affiche les 10 dernières opérations
-		for (var i = 0; i < array.length; i++) {
-			local.append(array[i]', ');
-		}
+	// 	affiche les 10 dernières opérations
+	for (var j = 0; j < array.length; j++) {
+		local.append('<li>'+array[j]+'</li>')
+	}
 
 	}else{
-		//ajout les éléments dans le tableau
+	// 	ajout les éléments dans le tableau
 		array.push(arg+'='+result);
-		local.append(his+', ');
+		local.append(li);
+		li.append(his);
 	}
 	
 }
@@ -128,20 +138,6 @@ function clearAffiche() {
 	affiche.innerHTML = "";
 }
 
-//désactive les boutons d'opérateurs
-function disabled (btn) {
-
-	btn.disabled = true;
-	
-}
-
-//Rend les boutons d'opérateurs disponibles
-function active (){
-
-	for (var i = 0; i < btn.length; i++) {
-		btn[i].removeAttribute('disabled');
-	}	
-}
 
   	</script>
   </body>

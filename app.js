@@ -1,41 +1,85 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const path        = require('path');
+const express     = require('express');
+const expressApp  = express();
+const http        = require('http').Server(expressApp);
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// Routes handler
+const index = require('./routes/index');
 
-var app = express();
+/* variable initialisation's */
+const router = {
+  isStarted: false
+};
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+/**
+ * Starting web server on port 3000
+ * 
+ * When we start we create tables in database if not exist
+ * @param {*} callback 
+ */
+function start(callback) {
+  if (router.isStarted === false) {
+    init(function () {
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+      // Handle routes function
+      loadRoutes(function () {
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+            // starting web server
+            http.listen(3000, function () {
+              console.log('Application is running on port 3000');
+              router.isStarted = true;
+              if (typeof callback != 'undefined') {
+                callback();
+              }
+            });
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+          // });
+      });
+    });
+  } else {
+    console.log("Application already started");
+    if (typeof callback != 'undefined') {
+      callback();
+    }
+  }
+}
 
-module.exports = app;
+
+/**
+ * Initialisation of view engine and others parameters
+ * @param {*} callback 
+ */
+function init(callback) {
+
+  /** view engine setup*/
+  expressApp.set('views', path.join(__dirname, 'views'));
+  expressApp.set('view engine', 'ejs');
+  
+  expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: false }));
+  expressApp.use(express.static(path.join(__dirname, 'public')));
+
+
+  /* Keep server down */
+  router.isStarted = false;
+  if (typeof callback != 'undefined') {
+    callback();
+  }
+}
+
+/**
+ * Route's management
+ * @param {*} callback 
+ */
+function loadRoutes(callback) {
+  expressApp.use("/", index);
+  if (typeof callback != 'undefined') {
+    callback();
+  }
+}
+
+module.exports = {
+  start: start
+};
