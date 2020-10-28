@@ -2,6 +2,7 @@ const btn = document.querySelectorAll(".button");
 let affiche = document.getElementById('affiche');
 let operation = document.getElementById('operation');
 let local = document.getElementById('local');
+
 let add = '+';
 let sous = '-';
 let multi ='*';
@@ -35,7 +36,7 @@ let array = [];
 
 function calcule (arg) {
 	
-	console.log(arg);
+
 	//gestion cas user rentre que des opérateurs
 	if(isNaN(parseInt(arg) ) == true ){
 		
@@ -46,10 +47,19 @@ function calcule (arg) {
 		return false;
 	}
 
+	//dernier element n'et pas un opérateur ou un .
+	if(arg.charAt(arg.length-1) == add || arg.charAt(arg.length-1) == sous || arg.charAt(arg.length-1) == multi || arg.charAt(arg.length-1) == divi || arg.charAt(arg.length-1) == '.' ){
+
+		// affiche un message d'erreur
+		affiche.innerHTML = 'ERROR';
+		operation.innerHTML = 'ERROR';
+
+		return false;
+	} 
+
 	//permet de calculer
 	var result = eval(arg);
 
-	console.log("result ", result)
 
 	switch(result){
 		case undefined :
