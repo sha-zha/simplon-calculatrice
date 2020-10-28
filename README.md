@@ -5,6 +5,6 @@ En utilisant la technologie Electron et les connaissances acquises vous devez pr
 ## lancer le projet 
 
 Afin de pouvoir lancer le projet il faut : 
-
-1. Installer les dépendances avec la commande :  npm install
-2. lancer npm run start-electron 
+1. Cloner le dépôt github
+2. Installer les dépendances avec la commande :  npm install
+3. lancer npm run start-electron 
