@@ -57,9 +57,10 @@ function calcule (arg) {
 		return false;
 	} 
 
-	//permet de calculer
+	//permet de calculer à ne plus JAMAIS UITILISER 
 	var result = eval(arg);
 
+	console.log(result)
 
 	switch(result){
 		case undefined :
@@ -103,6 +104,13 @@ function calcule (arg) {
 		break;
 
 		case Infinity :
+			// affiche un message d'erreur
+			affiche.innerHTML = 'ERROR';
+			operation.innerHTML = 'ERROR';
+
+		break;
+
+		case -Infinity :
 			// affiche un message d'erreur
 			affiche.innerHTML = 'ERROR';
 			operation.innerHTML = 'ERROR';
